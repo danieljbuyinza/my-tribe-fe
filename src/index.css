@@ -1,7 +1,11 @@
 /* For global app styles */
+@import "tailwindcss";
+
+* {
+	font-family: "Red Hat Display", system-ui, sans-serif;
+}
 
 :root {
-	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
 
@@ -17,7 +21,7 @@
 
 a {
 	font-weight: 500;
-	color: #646cff;
+	color: #535bf2;
 	text-decoration: inherit;
 }
 a:hover {
@@ -26,10 +30,12 @@ a:hover {
 
 body {
 	margin: 0;
-	display: flex;
-	place-items: center;
 	min-width: 320px;
 	min-height: 100vh;
+}
+
+h1 {
+	margin-bottom: 10px;
 }
 
 h1 {
