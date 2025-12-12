@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
-import TribesPage from "./pages/TribesPage";
+import TribesPage, { tribesLoader } from "./pages/TribesPage";
 import TribePage, { loader } from "./pages/TribePage";
 import Layout from "./Layout";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -26,6 +26,7 @@ const routes = [
 			{
 				path: "/tribes",
 				element: <TribesPage />,
+				loader: tribesLoader,
 			},
 			{
 				path: "/tribes/:slug",
