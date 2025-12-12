@@ -3,28 +3,47 @@ import { useLoaderData } from "react-router-dom";
 import axios from "axios";
 import SuggestionsList from "../SuggestionsList";
 import SuggestionForm from "../SuggestionForm";
+import useUser from "../useUser";
 
 export default function TribePage() {
 	const { tribe } = useLoaderData();
+	const [upvoted, setUpvoted] = useState(false);
 	const [upvotes, setUpvotes] = useState(tribe.upvotes);
 	const [suggestedReads, setSuggestedReads] = useState(tribe.suggestedReads);
 
+	const { isLoading, user } = useUser();
+
+	if (tribe.upvoteIds.includes(user?.uid)) {
+		if (!upvoted) {
+			setUpvoted(true);
+		}
+	}
+
 	async function suggestNextRead({ book, author, suggestedBy }) {
+		const token = user && (await user.getIdToken());
+		const headers = token ? { authToken: token } : {};
 		const response = await axios.post(
 			"/api/tribes/" + tribe.slug + "/suggest-next-read",
 			{
 				book: book,
 				author: author,
 				suggestedBy: suggestedBy,
-			}
+			},
+			{ headers }
 		);
 		const updatedSuggestedReads = response.data.tribe.suggestedReads;
 		setSuggestedReads(updatedSuggestedReads);
 	}
 
 	async function upvoteTribe() {
-		const response = await axios.post("/api/tribes/" + tribe.slug + "/upvote");
-		const updatedTribe = response.data.tribe;
+		const token = user && (await user.getIdToken());
+		const headers = token ? { authToken: token } : {};
+		const response = await axios.post(
+			"/api/tribes/" + tribe.slug + "/upvote",
+			null,
+			{ headers }
+		);
+		const updatedTribe = response.data.updatedTribe;
 		setUpvotes(updatedTribe.upvotes);
 	}
 
@@ -37,13 +56,24 @@ export default function TribePage() {
 				<SuggestionsList suggestedReads={suggestedReads} />
 			</div>
 
-			<div className="mb-5">
-				<SuggestionForm addSuggestion={suggestNextRead} />
-			</div>
+			{user ? (
+				<div className="mb-5">
+					<SuggestionForm addSuggestion={suggestNextRead} />
+				</div>
+			) : (
+				<p>Sign in to suggest the next read</p>
+			)}
 
-			<button type="button" onClick={upvoteTribe}>
-				Upvote
-			</button>
+			{user && (
+				<button
+					type="button"
+					disabled={upvoted}
+					onClick={upvoteTribe}
+					className="bg-neutral-700! cursor-default!"
+				>
+					{upvoted ? "Upvoted" : "Upvote"}
+				</button>
+			)}
 		</div>
 	);
 }

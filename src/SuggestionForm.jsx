@@ -9,13 +9,24 @@ export default function SuggestionForm({ addSuggestion }) {
 		<>
 			<h3>Suggest next read</h3>
 
-			<form>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					if (!book || !author) {
+						return;
+					}
+					addSuggestion({ book, author, suggestedBy });
+					setBook("");
+					setAuthor("");
+				}}
+			>
 				<label htmlFor="suggestion">Book:</label>
 				<input
 					type="text"
 					id="book"
 					value={book}
 					onChange={(e) => setBook(e.target.value)}
+					required
 				/>
 
 				<label htmlFor="author">Author:</label>
@@ -24,18 +35,10 @@ export default function SuggestionForm({ addSuggestion }) {
 					id="author"
 					value={author}
 					onChange={(e) => setAuthor(e.target.value)}
+					required
 				/>
 
-				<button
-					type="button"
-					onClick={() => {
-						addSuggestion({ book, author, suggestedBy });
-						setBook("");
-						setAuthor("");
-					}}
-				>
-					Suggest
-				</button>
+				<button type="submit">Suggest</button>
 			</form>
 		</>
 	);

@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import axios from "axios";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
@@ -7,6 +6,8 @@ import TribesPage from "./pages/TribesPage";
 import TribePage, { loader } from "./pages/TribePage";
 import Layout from "./Layout";
 import NotFoundPage from "./pages/NotFoundPage";
+import SignInPage from "./pages/SignInPage";
+import SignUpPage from "./pages/SignUpPage";
 
 const routes = [
 	{
@@ -30,6 +31,14 @@ const routes = [
 				path: "/tribes/:slug",
 				element: <TribePage />,
 				loader: loader,
+			},
+			{
+				path: "/sign-in",
+				element: <SignInPage />,
+			},
+			{
+				path: "/sign-up",
+				element: <SignUpPage />,
 			},
 		],
 	},
